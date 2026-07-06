@@ -1,22 +1,48 @@
-async function carregar(){
+async function carregar() {
 
-const dados = await fetch("/api/wallet");
+    try {
 
-const json = await dados.json();
+        const resposta = await fetch("/api/wallet");
 
-document.getElementById("wallet").innerHTML=json.address;
+        if (!resposta.ok) {
+            throw new Error("Erro ao consultar a API");
+        }
 
-document.getElementById("balance").innerHTML=
-json.balance+" SOL";
+        const json = await resposta.json();
 
-document.getElementById("usd").innerHTML=
-"US$ "+json.totalUsd;
+        document.getElementById("wallet").textContent =
+            json.wallet.address;
 
-document.getElementById("brl").innerHTML=
-"R$ "+json.totalBrl;
+        document.getElementById("balance").textContent =
+            `${json.wallet.balance} SOL`;
+
+        document.getElementById("usd").textContent =
+            `US$ ${json.total.usd}`;
+
+        document.getElementById("brl").textContent =
+            `R$ ${json.total.brl}`;
+
+    } catch (err) {
+
+        console.error(err);
+
+        document.getElementById("wallet").textContent =
+            "Carteira indisponível";
+
+        document.getElementById("balance").textContent =
+            "-- SOL";
+
+        document.getElementById("usd").textContent =
+            "US$ --";
+
+        document.getElementById("brl").textContent =
+            "R$ --";
+    }
 
 }
 
+// Carrega imediatamente
 carregar();
 
-setInterval(carregar,10000);
+// Atualiza a cada 10 segundos
+setInterval(carregar, 10000);
