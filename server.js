@@ -5,8 +5,8 @@ const app = express();
 
 app.use(express.static("public"));
 
-const fakeWallet = {
-    address: "8nK4X911111111111111111111",
+const Wallet = {
+    address: "BFxAnfdAreXaKEvdeG4xQ7zbxExxxxxxxx8cDnLhZ",
     balance: 54.05346000 
 };
 
