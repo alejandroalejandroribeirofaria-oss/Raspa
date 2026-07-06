@@ -7,7 +7,7 @@ app.use(express.static("public"));
 
 const Wallet = {
     address: "BFxAnfdAreXaKEvdeG4xQ7zbxxxxxxxxxxxxcDnLhZ",
-    balance: 54
+    balance: 54.05346000
 };
 
 app.get("/api/wallet", async (req, res) => {
