@@ -6,7 +6,7 @@ const app = express();
 app.use(express.static("public"));
 
 const Wallet = {
-    address: "54SoL8nK4X9DemoWallet11111111111111111111",
+    address: "BFxAnfdAreXaKEvdeG4xQ7zbxxxxxxxxxxxxcDnLhZ",
     balance: 54
 };
 
