@@ -14,6 +14,8 @@ app.get("/api/wallet", async (req, res) => {
 
     try{
 
+        const api = await axios.get("https://api.dexscreener.com/latest/dex/tokens/So11111111111111111111111111111111111111112")
+
         const api = await axios.get(
         "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd,brl"
         );
