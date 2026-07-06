@@ -12,43 +12,81 @@ const Wallet = {
 
 app.get("/api/wallet", async (req, res) => {
 
-    try{
+    try {
 
-        const api = await axios.get("https://api.dexscreener.com/latest/dex/tokens/So11111111111111111111111111111111111111112")
+        const [dexRes, coinRes] = await Promise.all([
 
-        const api = await axios.get(
-        "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd,brl"
-        );
+            axios.get(
+                "https://api.dexscreener.com/latest/dex/tokens/So11111111111111111111111111111111111111112"
+            ),
 
-        const usd = api.data.solana.usd;
-        const brl = api.data.solana.brl;
+            axios.get(
+                "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd,brl"
+            )
+
+        ]);
+
+        const usd = coinRes.data.solana.usd;
+        const brl = coinRes.data.solana.brl;
+
+        const pair = dexRes.data.pairs?.[0] || {};
 
         res.json({
 
-            address: Wallet.address,
-            balance: Wallet.balance,
-            usdPrice: usd,
-            brlPrice: brl,
-            totalUsd: (Wallet.balance*usd).toFixed(2),
-            totalBrl: (Wallet.balance*brl).toFixed(2)
+            wallet: {
+                address: Wallet.address,
+                balance: Wallet.balance
+            },
+
+            price: {
+                usd,
+                brl
+            },
+
+            total: {
+                usd: (Wallet.balance * usd).toFixed(2),
+                brl: (Wallet.balance * brl).toFixed(2)
+            },
+
+            dex: {
+                chain: pair.chainId,
+                dex: pair.dexId,
+                priceUsd: pair.priceUsd,
+                priceNative: pair.priceNative,
+                liquidity: pair.liquidity?.usd,
+                volume24h: pair.volume?.h24,
+                fdv: pair.fdv,
+                marketCap: pair.marketCap,
+                pairAddress: pair.pairAddress,
+                url: pair.url
+            }
 
         });
 
-    }catch(e){
+    } catch (err) {
 
-        res.json({
-            address: Wallet.address,
-            balance:54.05346000,
-            usdPrice:0,
-            brlPrice:0
+        console.error(err.message);
+
+        res.status(500).json({
+
+            error: true,
+            message: "Erro ao consultar APIs.",
+
+            wallet: {
+                address: Wallet.address,
+                balance: Wallet.balance
+            }
+
         });
 
     }
 
 });
 
-app.listen(3000,()=>{
+const PORT = process.env.PORT || 3000;
 
-console.log("Servidor iniciado");
+app.listen(PORT, () => {
+
+    console.log(`🚀 Servidor iniciado na porta ${PORT}`);
 
 });
