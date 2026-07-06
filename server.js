@@ -36,7 +36,7 @@ app.get("/api/wallet", async (req, res) => {
 
         res.json({
             address: Wallet.address,
-            balance:54,
+            balance:54.05346000,
             usdPrice:0,
             brlPrice:0
         });
